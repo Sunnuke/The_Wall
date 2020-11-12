@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+# from app_wall import urls
 urlpatterns = [
     path('', views.index),
     path('success', views.success),
