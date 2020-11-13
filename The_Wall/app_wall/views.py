@@ -24,3 +24,8 @@ def comment(request):
         comment=request.POST['comment']
     )
     return redirect('/wall')
+
+def delete(request):
+    c = Message.objects.get(id=request.POST['delkey'])
+    c.delete()
+    return redirect('/wall')

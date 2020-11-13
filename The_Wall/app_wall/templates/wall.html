@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wild Wall</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'wall.css' %}">
 </head>
 <body>
     <div id="topBar">
         <h1>Your Wild Wall</h1>
         <div class="yourbar">
             <h3>Welcome {{ User.first_name }}</h3>
-            <a href="/Logout">Logoff</a>
+            <a href="/Logout" style="padding-top: 20px;">Logoff</a>
         </div>
     </div>
     <div id="Box">
@@ -18,24 +20,35 @@
             <h2>Post A Message</h2>
             <form action="message" method="POST">
                 {% csrf_token %}
-                <textarea name="message" id="message" cols="30" rows="10" required></textarea>
-                <br><button type="submit">Post A Message</button>
+                <textarea name="message" id="message" cols="110" rows="10" required></textarea>
+                <br><button type="submit" style="background-color: rgb(38, 38, 148); color: cornsilk;">Post A Message</button>
             </form>
         </div>
         <div class="content">
             {% if Messages %}
                 {% for message in Messages %}
+                <div style="display: flex;">
                     <h2>{{ message.user.first_name }} {{ message.user.last_name }} - {{ message.created_at }}</h2>
+                    {% if message.user.id == request.session.user %}
+                        <form action="delete" method="POST" style="padding-top: 10px;">
+                            {% csrf_token %}
+                            <input type="hidden" name="delkey" value="{{ message.id }}">
+                            <button type="submit" style="background-color: rgb(141, 27, 27); color: cornsilk;">Delete Message</button>
+                        </form>
+                    {% endif %}
+                </div>
                     <p>{{ message.message }}</p>
                     {% for comment in message.comments.all %}
-                        <h3>{{ comment.user.first_name }} {{ comment.user.last_name }} - {{ comment.created_at }}</h3>
-                        <p>{{ comment.comment }}</p>
+                        <div style="padding-left: 20px;">
+                            <h3>*{{ comment.user.first_name }} {{ comment.user.last_name }} - {{ comment.created_at }}</h3>
+                            <p style="padding-left: 20px;">{{ comment.comment }}</p>
+                        </div>
                     {% endfor %}
                     <form action="comment" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="comkey" value="{{ message.id }}">
-                    <textarea name="comment" id="comment" cols="30" rows="10" required></textarea>
-                    <br><button type="submit">Post comment</button>
+                    <textarea name="comment" id="comment" cols="110" rows="10" required></textarea>
+                    <br><button type="submit" style="background-color: rgb(23, 131, 23); color: cornsilk;">Post comment</button>
                     </form>
                 {% endfor %}
             {% endif %}

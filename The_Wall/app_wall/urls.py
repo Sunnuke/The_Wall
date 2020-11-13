@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.wall),
     path('message', views.message),
     path('comment', views.comment),
+    path('delete', views.delete),
 ]
